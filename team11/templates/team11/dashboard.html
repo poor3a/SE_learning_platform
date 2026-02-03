@@ -51,10 +51,10 @@
             
             <div>
               <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 10px;">
-                <span class="exam-type-badge" style="background: {% if submission.submission_type == 'writing' %} #e3f2fd {% else %} #ffcccc {% endif %}; color: var(--navy); padding: 5px 15px; border-radius: 15px; font-weight: bold;">
+                <span class="exam-type-badge exam-type-{{ submission.submission_type }}">
                   {% if submission.submission_type == 'writing' %}نوشتن{% else %}اسپیکینگ{% endif %}
                 </span>
-                <span class="status-badge" style="background: {% if submission.status == 'completed' %}#d4edda{% else %}#ffcccc{% endif %}; color: {% if submission.status == 'completed' %}#155724{% else %}#856404{% endif %}; padding: 5px 15px; border-radius: 15px; font-size: 0.9rem;">
+                <span class="status-badge status-{{ submission.status }}">
                   {% if submission.status == 'completed' %}تکمیل شده{% elif submission.status == 'pending' %}در انتظار{% else %}{{ submission.status }}{% endif %}
                 </span>
               </div>
@@ -166,6 +166,47 @@
     .home-btn:hover {
       background: var(--dark-blue);
       color: white;
+    }
+
+    .exam-type-badge {
+      color: var(--navy);
+      padding: 5px 15px;
+      border-radius: 15px;
+      font-weight: bold;
+    }
+
+    .exam-type-writing {
+      background: #e3f2fd;
+    }
+
+    .exam-type-listening {
+      background: #ffccbc;
+    }
+
+    .status-badge {
+      padding: 5px 15px;
+      border-radius: 15px;
+      font-size: 0.9rem;
+    }
+
+    .status-completed {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .status-pending {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .status-in_progress {
+      background: #cfe2ff;
+      color: #084298;
+    }
+
+    .status-failed {
+      background: #f8d7da;
+      color: #721c24;
     }
   </style>
 </body>
