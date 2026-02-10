@@ -6,3 +6,6 @@ mysqlclient
 PyMySQL
 gunicorn
 whitenoise
+djangorestframework
+django-filter
+dj-database-url

@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('vocabulary_app', '0002_alter_word_current_day'),
+        ('team9', '0002_alter_word_current_day'),
     ]
 
     operations = [

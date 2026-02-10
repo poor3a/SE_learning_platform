@@ -32,7 +32,7 @@ class Migration(migrations.Migration):
                 ('review_history', models.CharField(default='00000000', max_length=8)),
                 ('is_learned', models.BooleanField(default=False)),
                 ('last_review_date', models.DateField(blank=True, null=True)),
-                ('lesson', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='words', to='vocabulary_app.lesson')),
+                ('lesson', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='words', to='team9.lesson')),
             ],
         ),
     ]

@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('vocabulary_app', '0003_word_next_review_date'),
+        ('team9', '0003_word_next_review_date'),
     ]
 
     operations = [

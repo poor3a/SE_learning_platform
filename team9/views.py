@@ -1,7 +1,3 @@
-import sys
-import os
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 from django.http import JsonResponse
 from django.shortcuts import render
 from core.auth import api_login_required
