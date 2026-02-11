@@ -2,17 +2,16 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from . import views
 
-# Creating a router for our new API ViewSets
+# Creating a router for the REST API ViewSets
 router = DefaultRouter()
 router.register(r'lessons', views.LessonViewSet)
 router.register(r'words', views.WordViewSet)
 
 urlpatterns = [
-
+    # Standard team app endpoints (required by repo pattern)
     path("", views.base, name="base"),
     path("ping/", views.ping, name="ping"),
-
-    # --- New API URLs ---
-    # This includes all routes for lessons and words (GET, POST, etc.)
+    
+    # Vocabulary API endpoints
     path("api/", include(router.urls)),
 ]

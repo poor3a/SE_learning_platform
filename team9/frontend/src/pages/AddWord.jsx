@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import config from "../config";
 
 export default function AddWord() {
   const navigate = useNavigate();
@@ -11,7 +12,7 @@ export default function AddWord() {
 
  
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/team9/api/lessons/")
+    fetch(config.LESSONS_ENDPOINT)
       .then((res) => res.json())
       .then((data) => setLessons(data))
       .catch((err) => console.error("Error fetching lessons:", err));
@@ -24,7 +25,7 @@ export default function AddWord() {
     }
 
    
-    fetch("http://127.0.0.1:8000/team9/api/words/", {
+    fetch(config.WORDS_ENDPOINT, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

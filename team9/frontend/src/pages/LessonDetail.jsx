@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import config from "../config";
 
 export default function LessonDetail() {
   const { id } = useParams();
@@ -10,7 +11,7 @@ export default function LessonDetail() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:8000/team9/api/lessons/${id}/`)
+    fetch(`${config.API_BASE_URL}/team9/api/lessons/${id}/`)
       .then((res) => res.json())
       .then((data) => {
         setLesson(data);
@@ -71,7 +72,7 @@ export default function LessonDetail() {
     const isNowLearned = greenCount >= 6;
 
     
-    fetch(`http://127.0.0.1:8000/team9/api/words/${rowId}/`, {
+    fetch(`${config.API_BASE_URL}/team9/api/words/${rowId}/`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -107,7 +108,7 @@ export default function LessonDetail() {
 
   const removeWord = (rowId) => {
     if(!window.confirm("حذف شود؟")) return;
-    fetch(`http://127.0.0.1:8000/team9/api/words/${rowId}/`, { method: "DELETE" })
+    fetch(`${config.API_BASE_URL}/team9/api/words/${rowId}/`, { method: "DELETE" })
       .then(() => setRows(prev => prev.filter(r => r.id !== rowId)));
   };
 

@@ -1,6 +1,7 @@
 import { useMemo, useState, useEffect } from "react";
 import MicroserviceCard from "../components/MicroserviceCard";
 import { Link } from "react-router-dom";
+import config from "../config";
 
 export default function Microservices() {
   const [q, setQ] = useState("");
@@ -10,7 +11,7 @@ export default function Microservices() {
 
   // Fetch initial data from Django
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/team9/api/lessons/")
+    fetch(config.LESSONS_ENDPOINT)
       .then((res) => res.json())
       .then((data) => {
         setItems(data);
@@ -55,7 +56,7 @@ export default function Microservices() {
     }
 
     if (item?.isNew) {
-      fetch("http://127.0.0.1:8000/team9/api/lessons/", {
+      fetch(config.LESSONS_ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
@@ -71,7 +72,7 @@ export default function Microservices() {
         })
         .catch(err => console.error("POST Error:", err));
     } else {
-      fetch(`http://127.0.0.1:8000/team9/api/lessons/${id}/`, {
+      fetch(`${config.API_BASE_URL}/team9/api/lessons/${id}/`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title: v }),
@@ -89,7 +90,7 @@ export default function Microservices() {
   };
 
   const deleteLesson = (id) => {
-    fetch(`http://127.0.0.1:8000/team9/api/lessons/${id}/`, {
+    fetch(`${config.API_BASE_URL}/team9/api/lessons/${id}/`, {
       method: "DELETE",
     }).then(() => {
       setItems((prev) => prev.filter((x) => x.id !== id));
