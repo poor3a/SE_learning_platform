@@ -17,9 +17,17 @@ services:
       context: ..
       dockerfile: team15/Dockerfile
     env_file:
-      - ../.env.example
+      - ../.env
     environment:
       - CORE_BASE_URL=http://core:8000
+      - DEBUG=1
+    volumes:
+      - ../:/app
+    command: >
+      bash -lc "python manage.py migrate &&
+      python manage.py migrate --database=team15 &&
+      python manage.py load_mock_data &&
+      python manage.py runserver 0.0.0.0:8000"
     networks:
       - app404
 

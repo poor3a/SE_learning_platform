@@ -5,12 +5,15 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential pkg-config default-libmysqlclient-dev \
+  && rm -rf /var/lib/apt/lists/*
+
 COPY requirements.txt /app/
-RUN pip install --no-cache-dir -r requirements.txt || \
-    pip install --no-cache-dir Django==4.2.27 PyJWT django-environ django-cors-headers PyMySQL gunicorn whitenoise openai djangorestframework django-filter dj-database-url
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /app/
 
 EXPOSE 8000
 
-CMD ["bash", "-lc", "python manage.py migrate --database=team15 && python manage.py load_mock_data && python manage.py collectstatic --noinput && gunicorn app404.wsgi:application -b 0.0.0.0:8000"]
+CMD ["bash", "-lc", "python manage.py migrate && python manage.py migrate --database=team15 && python manage.py load_mock_data && python manage.py collectstatic --noinput && gunicorn app404.wsgi:application -b 0.0.0.0:8000"]
