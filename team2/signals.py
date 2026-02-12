@@ -8,13 +8,17 @@ from .models import UserDetails
 def create_user_details(sender, instance, created, using=None, **kwargs):
     
     if created:
-        UserDetails.objects.using('team2').get_or_create(
-            user_id=instance.id,
-            defaults={
-                'email': instance.email,
-                'role': 'student',
-            }
-        )
+        try:
+            UserDetails.objects.using('team2').get_or_create(
+                user_id=instance.id,
+                defaults={
+                    'email': instance.email,
+                    'role': 'student',
+                }
+            )
+        except Exception as e:
+            # اگر email تکراری بود، ایجاد نکن
+            print(f"خطا در ایجاد UserDetails: {str(e)}")
 
 
 @receiver(post_save, sender=User)
@@ -26,4 +30,12 @@ def update_user_details(sender, instance, created, using=None, **kwargs):
                 user_details.email = instance.email
                 user_details.save(using='team2')
         except UserDetails.DoesNotExist:
-            pass
+            # اگر UserDetails وجود ندارد، ایجاد کن
+            try:
+                UserDetails.objects.using('team2').create(
+                    user_id=instance.id,
+                    email=instance.email,
+                    role='student'
+                )
+            except Exception:
+                pass
