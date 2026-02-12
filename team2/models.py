@@ -103,11 +103,9 @@ class UserDetails(models.Model):
         default='student'
     )
 
-    lesson = models.ForeignKey(
+    lessons = models.ManyToManyField(
         Lesson,
-        on_delete=models.CASCADE,
-        related_name='user_details_list',
-        null=True,
+        related_name='user_details_set',
         blank=True
     )
 
