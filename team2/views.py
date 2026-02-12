@@ -33,6 +33,17 @@ def teacher_required(view_func):
     return wrapper
 
 
+def admin_required(view_func):
+    
+    @wraps(view_func)
+    def wrapper(request, *args, **kwargs):
+        if not request.user.is_staff:
+            messages.error(request, 'فقط ادمین‌ها دسترسی به این صفحه دارند.')
+            return redirect('team2_ping')
+        return view_func(request, *args, **kwargs)
+    return wrapper
+
+
 @api_login_required
 def ping(request):
     return JsonResponse({"team": TEAM_NAME, "ok": True})
