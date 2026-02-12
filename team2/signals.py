@@ -5,11 +5,11 @@ from .models import UserDetails
 
 
 @receiver(post_save, sender=User)
-def create_user_details(sender, instance, created, **kwargs):
+def create_user_details(sender, instance, created, using=None, **kwargs):
     
     if created:
-        UserDetails.objects.get_or_create(
-            user=instance,
+        UserDetails.objects.using('team2').get_or_create(
+            user_id=instance.id,
             defaults={
                 'email': instance.email,
                 'role': 'student',
@@ -18,12 +18,12 @@ def create_user_details(sender, instance, created, **kwargs):
 
 
 @receiver(post_save, sender=User)
-def update_user_details(sender, instance, created, **kwargs):
+def update_user_details(sender, instance, created, using=None, **kwargs):
     if not created:
         try:
-            user_details = UserDetails.objects.get(user=instance)
+            user_details = UserDetails.objects.using('team2').get(user_id=instance.id)
             if user_details.email != instance.email:
                 user_details.email = instance.email
-                user_details.save()
+                user_details.save(using='team2')
         except UserDetails.DoesNotExist:
             pass
