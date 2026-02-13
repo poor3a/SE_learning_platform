@@ -17,7 +17,6 @@ def create_user_details(sender, instance, created, using=None, **kwargs):
                 }
             )
         except Exception as e:
-            # اگر email تکراری بود، ایجاد نکن
             print(f"خطا در ایجاد UserDetails: {str(e)}")
 
 
@@ -30,7 +29,6 @@ def update_user_details(sender, instance, created, using=None, **kwargs):
                 user_details.email = instance.email
                 user_details.save(using='team2')
         except UserDetails.DoesNotExist:
-            # اگر UserDetails وجود ندارد، ایجاد کن
             try:
                 UserDetails.objects.using('team2').create(
                     user_id=instance.id,
