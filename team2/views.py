@@ -294,6 +294,16 @@ def rate_lesson_api(request, lesson_id):
 
     lesson = get_object_or_404(Lesson, id=lesson_id, is_deleted=False, status='published')
 
+    # بررسی اینکه آیا کاربر در این درس ثبت‌نام کرده یا نه
+    try:
+        user_details = UserDetails.objects.using('team2').get(user_id=request.user.id)
+        if not user_details.lessons.filter(id=lesson_id).exists():
+            return JsonResponse({
+                'error': 'شما در این درس ثبت‌نام نکرده‌اید. فقط شرکت‌کنندگان می‌توانند امتیاز دهند.'
+            }, status=403)
+    except UserDetails.DoesNotExist:
+        return JsonResponse({'error': 'پروفایل کاربری یافت نشد'}, status=404)
+
     try:
         data = json.loads(request.body)
         score = int(data.get('score', 0))
@@ -392,11 +402,19 @@ def lesson_ratings_api(request, lesson_id):
 @api_login_required
 @require_http_methods(["GET"])
 def lessons_with_rating_view(request):
-
-    lessons = Lesson.objects.using('team2').filter(
-        is_deleted=False,
-        status='published'
-    ).order_by('-created_at')
+    """
+    صفحه نمایش دروس با قابلیت امتیازدهی
+    فقط دروسی که کاربر در آن‌ها ثبت‌نام کرده
+    """
+    try:
+        user_details = UserDetails.objects.using('team2').get(user_id=request.user.id)
+        # فقط دروسی که user در آن‌ها ثبت‌نام کرده
+        lessons = user_details.lessons.filter(
+            is_deleted=False,
+            status='published'
+        ).order_by('-created_at')
+    except UserDetails.DoesNotExist:
+        lessons = Lesson.objects.none()
 
     context = {
         'lessons': lessons,
