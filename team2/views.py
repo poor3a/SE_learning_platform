@@ -539,3 +539,39 @@ def student_lesson_videos_view(request, lesson_id):
         'total_videos': videos.count(),
     }
     return render(request, 'team2_student_lesson_videos.html', context)
+
+    
+@api_login_required
+@teacher_required
+@require_http_methods(["POST"])
+def publish_lesson_view(request, lesson_id):
+    
+    try:
+        user_details = UserDetails.objects.using('team2').get(user_id=request.user.id)
+        lesson = get_object_or_404(Lesson.objects.using('team2'), id=lesson_id, is_deleted=False)
+        
+        if lesson.creator != user_details:
+            messages.error(request, 'شما فقط می‌توانید کلاس‌هایی که خودتان ساخته‌اید را منتشر کنید.')
+            return redirect('team2_teacher_lessons')
+        
+        if not lesson.videos.filter(is_deleted=False).exists():
+            messages.error(request, 'برای پابلیش درس باید حداقل یک ویدیو اضافه کنید.')
+            return redirect('team2_teacher_lessons')
+        
+        from django.utils import timezone
+        lesson.status = 'published'
+        lesson.published_date = timezone.now()
+        lesson.save(using='team2')
+        
+        messages.success(request, f'درس "{lesson.title}" با موفقیت منتشر شد.')
+        return redirect('team2_teacher_lessons')
+    
+    except UserDetails.DoesNotExist:
+        messages.error(request, 'پروفایل معلم یافت نشد.')
+        return redirect('team2_teacher_lessons')
+    except Lesson.DoesNotExist:
+        messages.error(request, 'این درس پیدا نشد.')
+        return redirect('team2_teacher_lessons')
+    except Exception as e:
+        messages.error(request, f'خطا در انتشار درس: {str(e)}')
+        return redirect('team2_teacher_lessons')
