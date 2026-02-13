@@ -41,6 +41,15 @@ class Lesson(models.Model):
     is_deleted = models.BooleanField(
         default=False,
     )
+    
+    creator = models.ForeignKey(
+        'UserDetails',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='created_lessons',
+        help_text='معلمی که این کلاس را ساخته است'
+    )
 
     class Meta:
         ordering = ['-created_at']
