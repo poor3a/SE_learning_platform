@@ -192,13 +192,48 @@
             display: inline-block;
         }
 
-        .add-lesson-btn:hover {
-            background-color: #45a049;
+        .lesson-status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .lesson-status.draft {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .lesson-status.published {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
             text-decoration: none;
             color: white;
         }
 
-        @media (max-width: 768px) {
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+            text-decoration: none;
+            color: white;
+        }
+
             .teacher-header {
                 flex-direction: column;
                 gap: 15px;
@@ -216,6 +251,7 @@
         <!-- Header -->
         <header class="header">
             <div class="header-left">
+                <a href="{% url 'team2_index' %}" class="home-btn" style="margin-left: 15px;">🏠 صفحه اصلی</a>
                 <a href="{% url 'microservices' %}" class="home-btn">میکروسرویس ها</a>
                 <div class="nav-item">درباره ما</div>
             </div>
@@ -281,6 +317,13 @@
                             <div class="lesson-card-header">
                                 <h3 class="lesson-title">{{ lesson.title }}</h3>
                                 <div class="lesson-subject">{{ lesson.subject }} • {{ lesson.level|upper }}</div>
+                                <div class="lesson-status {% if lesson.status == 'published' %}published{% else %}draft{% endif %}">
+                                    {% if lesson.status == 'published' %}
+                                        ✓ منتشرشده
+                                    {% else %}
+                                        📝 پیش‌نویس
+                                    {% endif %}
+                                </div>
                             </div>
                             <div class="lesson-card-body">
                                 <div class="lesson-stats">
@@ -300,6 +343,14 @@
                                     <a href="{% url 'teacher_add_video' lesson.id %}" class="btn btn-secondary">
                                         ➕ اضافه کردن ویدیو
                                     </a>
+                                    {% if lesson.status != 'published' %}
+                                        <form method="POST" action="{% url 'publish_lesson' lesson.id %}" style="margin: 0;">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-success" style="width: 100%;">
+                                                🚀 انتشار درس
+                                            </button>
+                                        </form>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>

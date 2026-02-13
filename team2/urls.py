@@ -13,10 +13,15 @@ urlpatterns = [
     path("lessons/", views.lessons_list_view, name="team2_lessons_list"),
     path("lessons/rating/", views.lessons_with_rating_view, name="team2_lessons_rating"),
     path("lessons/<int:lesson_id>/", views.lesson_details_view, name="team2_lesson_details"),
-
-    # Teacher URLs
+    
+    path("browse/", views.browse_lessons_view, name="browse_lessons"),
+    path("browse/<int:lesson_id>/enroll/", views.enroll_lesson_view, name="enroll_lesson"),
+    path("student/lessons/<int:lesson_id>/videos/", views.student_lesson_videos_view, name="student_lesson_videos"),
+    path("student/lessons/<int:lesson_id>/watch/<int:video_id>/", views.watch_video_view, name="watch_video"),
+    
     path("teacher/lessons/", views.teacher_lessons_view, name="team2_teacher_lessons"),
     path("teacher/lessons/create/", views.teacher_create_lesson_view, name="teacher_create_lesson"),
+    path("teacher/lessons/<int:lesson_id>/publish/", views.publish_lesson_view, name="publish_lesson"),
     path("teacher/lessons/<int:lesson_id>/videos/", views.teacher_lesson_videos_view, name="teacher_lesson_videos"),
     path("teacher/lessons/<int:lesson_id>/add-video/", views.add_video_view, name="teacher_add_video"),
     path("teacher/dashboard/", views.teacher_dashboard_view, name="teacher_dashboard"),
